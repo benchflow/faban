@@ -241,6 +241,7 @@ public class MasterImpl extends UnicastRemoteObject implements Master {
         timer = new Timer();
 
         agentRefs = new Agent[benchDef.drivers.length][];
+        logger.info("REMOVE - agentRefs created with lenght: " + benchDef.drivers.length);
         agentThreads = new int[benchDef.drivers.length];
         remainderThreads = new int[benchDef.drivers.length];
 
@@ -474,11 +475,16 @@ public class MasterImpl extends UnicastRemoteObject implements Master {
                 // just for the agents being used.
                 agentRefs[i] = new Agent[agentCnt];
 
+                logger.info("REMOVE - Added agent to inde: " + i);
+                logger.info("REMOVE - Added agent to AgentRef: " + agentRefs[i]);
+
                 int j = 0;
                 for (Agent agent : sortMap.values()) {
                     if (j >= agentCnt)
                         break;
                     agentRefs[i][j++] = agent;
+                    logger.info("REMOVE - Adding in: " + (j-1));
+                    logger.info("REMOVE - Adding: " + agent);
                 }
 
                 // Finally, calculate the agent and overflow threads.
@@ -638,6 +644,7 @@ public class MasterImpl extends UnicastRemoteObject implements Master {
         int agentCnt = runInfo.driverConfigs[driverType].numAgents;
         if (agentCnt > 0) {
             Agent[] refs = agentRefs[driverType];
+            logger.info("REMOVE - Starting Agents in startThreads: " + refs.length);
             for (Agent ref : refs)
                 ref.startThreads();
         }
@@ -787,6 +794,7 @@ public class MasterImpl extends UnicastRemoteObject implements Master {
              driverType++) {
             if (runInfo.driverConfigs[driverType].numAgents > 0) {
                 Agent refs[] = agentRefs[driverType];
+                logger.info("REMOVE - Joining agets: " + refs.length);
                 // Make sure we join the first agent last
                 for (int i = refs.length - 1; i >= 0; i--) {
 					try {
@@ -865,7 +873,7 @@ public class MasterImpl extends UnicastRemoteObject implements Master {
         /* Gather stats and print report */
         changeState(MasterState.RESULTS);
         int driverTypes = runInfo.driverConfigs.length;
-        logger.info("REMOVE - driverTypes: " + driverTypes);
+        logger.info("driverTypes: " + driverTypes);
         ArrayList<Map<String, Metrics>> resultsList =
                 new ArrayList<Map<String, Metrics>>(driverTypes);
 
@@ -925,6 +933,7 @@ public class MasterImpl extends UnicastRemoteObject implements Master {
         LinkedHashMap<String, Metrics> hostMetrics =
                                    new LinkedHashMap<String, Metrics>();
         try {
+            logger.info("REMOVE - numAgents before if is: " + runInfo.driverConfigs[driverType].numAgents);
             if (runInfo.driverConfigs[driverType].numAgents > 0) {
                 logger.info("REMOVE - numAgents is: " + runInfo.driverConfigs[driverType].numAgents);
                 Agent[] agents = agentRefs[driverType];
@@ -1026,11 +1035,11 @@ public class MasterImpl extends UnicastRemoteObject implements Master {
                 logger.info("REMOVE - summaryContent in generateReports: " + summaryContent);
                 if (summaryContent != null) {
                     String runOutputDir = runInfo.resultsDir + fs;
-                    logger.info("REMOVE - runOutputDir in generateReports: " + runOutputDir);
+                    logger.info("REMOVE - runOutputDir in generateReports : " + runOutputDir);
                     FileWriter summary = new FileWriter(runOutputDir + 
                             "summary.xml." + host);
                     FileWriter detail = new FileWriter(runOutputDir + 
-                            "detail.xan." + host);
+                            "detail.xan." + host);  
 
                     // As all stats from each agentImpl are of the same type,
                     // we can create a new instance from any instance.
