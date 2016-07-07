@@ -125,7 +125,7 @@
 
         <mkdir dir="output"/>
 
-        <mkdir dir="samples/benchmarks/web101/lib"/>
+        <!-- <mkdir dir="samples/benchmarks/web101/lib"/>
         <copy todir="samples/benchmarks/web101"
             overwrite="true" preservelastmodified="true"
             includeEmptyDirs="true" verbose="true">
@@ -207,7 +207,7 @@
             overwrite="true" preservelastmodified="true"
             includeEmptyDirs="true" verbose="true">
             <fileset dir="${workspace.dir}/samples/services/OracleService"/>
-        </copy>
+        </copy> -->
 
         <copy todir="master/common/endorsed"
             overwrite="true" preservelastmodified="true"
